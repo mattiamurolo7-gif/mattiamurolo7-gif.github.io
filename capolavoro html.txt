@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formazione SSC Napoli</title>
+    <style>
+        :root {
+            --napoli-blue: #00b0ff;
+            --napoli-dark: #005cbf;
+            --pitch-green: #2ecc71;
+            --pitch-line: rgba(255, 255, 255, 0.6);
+            --text-dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--napoli-blue), var(--napoli-dark));
+            color: white;
+            text-align: center;
+            padding: 2em 1em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 900px) {
+            .container {
+                grid-template-columns: 1.2fr 0.8fr;
+            }
+        }
+
+        /* --- STILE CAMPO DA GIOCO --- */
+        .pitch-container {
+            background: #1e7e34;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .pitch {
+            background-color: var(--pitch-green);
+            background-image: linear-gradient(rgba(255,255,255,0.05) 50%, transparent 50%);
+            background-size: 100% 10%;
+            border: 3px solid var(--pitch-line);
+            border-radius: 8px;
+            height: 650px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Linee del campo */
+        .pitch::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--pitch-line);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            border: 3px solid var(--pitch-line);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        /* Righe dei Giocatori (Flexbox per gestione moduli) */
+        .pitch-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .player-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            text-align: center;
+        }
+
+        .jersey {
+            background: radial-gradient(circle, #fff 10%, var(--napoli-blue) 11%);
+            color: white;
+            font-weight: bold;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .player-name {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            margin-top: 5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 600;
+        }
+
+        /* --- STILE LISTA SQUADRA --- */
+        .squad-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .squad-list h2 {
+            margin-top: 0;
+            border-bottom: 3px solid var(--napoli-blue);
+            padding-bottom: 10px;
+            color: var(--napoli-dark);
+        }
+
+        .position-group {
+            margin-bottom: 20px;
+        }
+
+        .position-title {
+            font-weight: bold;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .player-row:last-child {
+            border-bottom: none;
+        }
+
+        .number-badge {
+            background-color: #e1f5fe;
+            color: var(--napoli-dark);
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SSC NAPOLI</h1>
+        <p>Formazione Titolare & Rosa Aggiornata</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Campo da Gioco (Modulo 3-4-2-1) -->
+        <div class="pitch-container">
+            <div class="pitch">
+                <div class="center-circle"></div>
+
+                <!-- Attacco -->
+                <div class="pitch-row">
+                    <div class="player-card">
+                        <div class="jersey">19</div>
+                        <div class="player-name">Højlund</div>
+                    </div>
+                </div>
+
+                <!-- Sottopunte / Trequartisti -->
+                <div class="pitch-row">
+                    <div class="player-card">
+                        <div class="jersey">21</div>
+                        <div class="player-name">Politano</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">11</div>
+                        <div class="player-name">De Bruyne</div>
+                    </div>
+                </div>
+
+                <!-- Centrocampo -->
+                <div class="pitch-row">
+                    <div class="player-card">
+                        <div class="jersey">3</div>
+                        <div class="player-name">Gutiérrez</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">8</div>
+                        <div class="player-name">McTominay</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">68</div>
+                        <div class="player-name">Lobotka</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">22</div>
+                        <div class="player-name">Di Lorenzo</div>
+                    </div>
+                </div>
+
+                <!-- Difesa -->
+                <div class="pitch-row">
+                    <div class="player-card">
+                        <div class="jersey">31</div>
+                        <div class="player-name">Beukema</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">4</div>
+                        <div class="player-name">Buongiorno</div>
+                    </div>
+                    <div class="player-card">
+                        <div class="jersey">13</div>
+                        <div class="player-name">Rrahmani</div>
+                    </div>
+                </div>
+
+                <!-- Portiere -->
+                <div class="pitch-row">
+                    <div class="player-card">
+                        <div class="jersey">1</div>
+                        <div class="player-name">Meret</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Lista Dettagliata della Rosa -->
+        <div class="squad-list">
+            <h2>I Protagonisti</h2>
+            
+            <div class="position-group">
+                <div class="position-title">Portieri</div>
+                <div class="player-row"><span><span class="number-badge">1</span> Alex Meret</span><strong>POR</strong></div>
+                <div class="player-row"><span><span class="number-badge">32</span> V. Milinković-Savić</span><strong>POR</strong></div>
+            </div>
+
+            <div class="position-group">
+                <div class="position-title">Difensori</div>
+                <div class="player-row"><span><span class="number-badge">4</span> Alessandro Buongiorno</span><strong>DC</strong></div>
+                <div class="player-row"><span><span class="number-badge">13</span> Amir Rrahmani</span><strong>DC</strong></div>
+                <div class="player-row"><span><span class="number-badge">31</span> Sam Beukema</span><strong>DC</strong></div>
+                <div class="player-row"><span><span class="number-badge">22</span> Giovanni Di Lorenzo (C)</span><strong>TD / DC</strong></div>
+                <div class="player-row"><span><span class="number-badge">17</span> Mathías Olivera</span><strong>TS</strong></div>
+            </div>
+
+            <div class="position-group">
+                <div class="position-title">Centrocampisti</div>
+                <div class="player-row"><span><span class="number-badge">68</span> Stanislav Lobotka</span><strong>CC</strong></div>
+                <div class="player-row"><span><span class="number-badge">8</span> Scott McTominay</span><strong>CC / TRQ</strong></div>
+                <div class="player-row"><span><span class="number-badge">3</span> Miguel Gutiérrez</span><strong>CLS / TS</strong></div>
+                <div class="player-row"><span><span class="number-badge">99</span> Frank Anguissa</span><span>CC</span></div>
+                <div class="player-row"><span><span class="number-badge">6</span> Billy Gilmour</span><span>CC</span></div>
+            </div>
+
+            <div class="position-group">
+                <div class="position-title">Attaccanti / Trequartisti</div>
+                <div class="player-row"><span><span class="number-badge">11</span> Kevin De Bruyne</span><strong>TRQ</strong></div>
+                <div class="player-row"><span><span class="number-badge">21</span> Matteo Politano</span><strong>AD</strong></div>
+                <div class="player-row"><span><span class="number-badge">19</span> Rasmus Højlund</span><strong>ATT</strong></div>
+                <div class="player-row"><span><span class="number-badge">9</span> Romelu Lukaku</span><strong>ATT</strong></div>
+                <div class="player-row"><span><span class="number-badge">7</span> David Neres</span><strong>AS / AD</strong></div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
